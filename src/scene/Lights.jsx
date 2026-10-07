@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react'
 import { useThree } from '@react-three/fiber'
 import { Sky, Stars } from '@react-three/drei'
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
-import { useStore } from '../store.js'
+import { useStore, isMobile } from '../store.js'
 import { M, applyTimeOfDay } from '../lib/materials.js'
 import { Downlight } from './Decor.jsx'
 
@@ -84,7 +84,7 @@ export default function Lights() {
     o.position.copy(TARGET)
     return o
   }, [])
-  const mapSize = quality === 'high' ? 4096 : 2048
+  const mapSize = quality === 'high' ? (isMobile ? 2048 : 4096) : isMobile ? 1024 : 2048
 
   return (
     <>

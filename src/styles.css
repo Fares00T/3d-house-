@@ -169,6 +169,33 @@ button {
   color: var(--muted);
 }
 
+/* ------------------------------------------------------------ notices */
+.notice {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding: 24px clamp(16px, 6vw, 88px);
+  background: var(--plaster);
+  z-index: 20;
+}
+.notice__card {
+  max-width: 440px;
+}
+.notice h1 {
+  font-size: clamp(30px, 5vw, 44px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 18px 0 12px;
+}
+.notice p {
+  font-size: 17px;
+  line-height: 1.5;
+  margin: 0 0 22px;
+  color: #2c3450;
+}
+
 /* ------------------------------------------------------------ hud */
 .hud {
   position: fixed;

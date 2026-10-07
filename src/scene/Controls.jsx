@@ -19,6 +19,13 @@ const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a))
 const lerpAngle = (a, b, t) => a + wrap(b - a) * t
 const smooth = (t) => t * t * (3 - 2 * t)
 
+// Vertical field of view for walking. Landscape screens use 68°; tall phone
+// screens open it up so you still see about 60° across instead of a keyhole.
+const walkFov = (aspect) => {
+  const fromWidth = (2 * Math.atan(Math.tan((31 * Math.PI) / 180) / aspect) * 180) / Math.PI
+  return Math.min(100, Math.max(68, fromWidth))
+}
+
 // ------------------------------------------------------------------ collisions
 function buildColliders(root) {
   const out = []
@@ -122,7 +129,7 @@ function ease(t, a, b) {
 
 // ------------------------------------------------------------------ player (walk + tour)
 export function Player() {
-  const { camera, gl } = useThree()
+  const { camera, gl, size } = useThree()
   const mode = useStore((s) => s.mode)
   const started = useStore((s) => s.started)
   const cursor = useRef()
@@ -138,6 +145,7 @@ export function Player() {
     tourT: 0,
     lastProgress: 0,
     lastRoom: null,
+    fov: 68,
   }).current
   const tour = useMemo(buildTour, [])
   const ray = useMemo(() => new THREE.Raycaster(), [])
@@ -166,11 +174,14 @@ export function Player() {
       st.tourT = 0
       st.glide = null
     }
-    if (mode === 'walk') {
-      camera.fov = 68
-      camera.updateProjectionMatrix()
-    }
-  }, [mode, st, camera])
+  }, [mode, st])
+
+  useEffect(() => {
+    if (mode === 'overview') return
+    st.fov = walkFov(size.width / size.height)
+    camera.fov = st.fov
+    camera.updateProjectionMatrix()
+  }, [mode, size.width, size.height, st, camera])
 
   // input
   useEffect(() => {
@@ -198,7 +209,7 @@ export function Player() {
         cancelTour()
       }
       if (d.moved && getState().mode === 'walk') {
-        const k = (d.touch ? 0.005 : 0.0034) * (camera.fov / 68)
+        const k = (d.touch ? 0.005 : 0.0034) * (camera.fov / st.fov)
         pose.yaw += dx * k
         pose.pitch = Math.max(-1.2, Math.min(1.2, pose.pitch + dy * k))
       }
@@ -220,7 +231,7 @@ export function Player() {
     const onWheel = (e) => {
       if (getState().mode === 'overview') return
       e.preventDefault()
-      camera.fov = Math.max(32, Math.min(80, camera.fov + e.deltaY * 0.03))
+      camera.fov = Math.max(32, Math.min(st.fov + 12, camera.fov + e.deltaY * 0.03))
       camera.updateProjectionMatrix()
     }
     const onKey = (e) => {

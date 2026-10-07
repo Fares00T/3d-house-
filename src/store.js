@@ -1,11 +1,25 @@
 import { useSyncExternalStore } from 'react'
 
+// Phones and tablets have far less graphics memory than desktops, so they
+// start in fast mode (no post-processing, smaller shadows, 1x pixel ratio).
+export const isMobile =
+  typeof window !== 'undefined' &&
+  (window.matchMedia?.('(pointer: coarse)').matches || Math.min(window.innerWidth, window.innerHeight) < 600)
+
+function fastRequested() {
+  try {
+    return sessionStorage.getItem('a9-fast') === '1'
+  } catch {
+    return false
+  }
+}
+
 // Tiny external store for UI state that React needs to re-render on.
 const state = {
   started: false,
   mode: 'walk', // 'walk' | 'tour' | 'overview'
   time: 'day', // 'day' | 'night'
-  quality: 'high', // 'high' | 'low'
+  quality: isMobile || fastRequested() ? 'low' : 'high', // 'high' | 'low'
   room: 'living',
   caption: null, // { code, title, text }
   tourProgress: 0,
