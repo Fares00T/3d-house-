@@ -12,7 +12,7 @@ function build() {
 
   return {
     // shell
-    paint: std('#eeede9', 0.92),
+    paint: std('#e7e5e1', 0.92),
     ceiling: std('#f4f3f0', 0.95),
     render: std('#e6e4df', 0.95),
     facade: std('#ffffff', 0.95, 0, { map: T.facadeTexture() }),
@@ -28,6 +28,8 @@ function build() {
     // joinery
     walnut: std('#ffffff', 0.42, 0, { map: T.walnutTexture() }),
     walnutMatte: std('#d9cfc6', 0.6, 0, { map: T.walnutTexture() }),
+    walnutGloss: phys({ color: '#ffffff', map: T.walnutTexture(), roughness: 0.32, clearcoat: 1, clearcoatRoughness: 0.08 }),
+    lightWood: std('#c29a6e', 0.55),
     navy: std('#1c2a4a', 0.5),
     navyDeep: std('#141f38', 0.6),
     graphite: std('#45494d', 0.45),
@@ -70,6 +72,7 @@ function build() {
     sofa: fabricMat('#8e9095'),
     sofaButton: std('#5a5c60', 0.8),
     navyFabric: fabricMat('#2c3f69'),
+    denimFabric: fabricMat('#4d6593'),
     redFabric: fabricMat('#c4271f'),
     redShell: std('#c4271f', 0.95, 0, { map: fabric, bumpMap: fabric, bumpScale: 0.6, side: THREE.DoubleSide }),
     sheer: std('#f6f3ee', 1, 0, { transparent: true, opacity: 0.72, side: THREE.DoubleSide, depthWrite: false }),

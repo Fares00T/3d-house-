@@ -10,7 +10,7 @@ function Wardrobe({ x0, x1, z0, depth = 0.57, doors = 2, finish = 'walnut', mirr
   const doorMat = finish === 'walnut' ? M.walnut : M.satin
   return (
     <group userData={{ collider: true }}>
-      <B s={[w, 2.7, depth - 0.02]} p={[(x0 + x1) / 2, 1.35, z0 + (depth - 0.02) / 2]} m={M.carcass} />
+      <B s={[w, 2.7, depth - 0.02]} p={[(x0 + x1) / 2, 1.35, z0 + (depth - 0.02) / 2]} m={finish === 'walnut' ? M.walnut : M.satin} tile={finish === 'walnut' ? 0.8 : 0} />
       {Array.from({ length: doors }, (_, i) => {
         const cx = x0 + dw * (i + 0.5)
         const handleX = i % 2 === 0 ? cx + dw / 2 - 0.05 : cx - dw / 2 + 0.05
