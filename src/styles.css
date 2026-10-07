@@ -1,0 +1,511 @@
+:root {
+  --ink: #1b2440;
+  --navy: #1f2e52;
+  --plaster: #efeee9;
+  --plaster-glass: rgba(239, 238, 233, 0.9);
+  --oak: #d8c3a0;
+  --walnut: #6b4226;
+  --signal: #c7362b;
+  --tag: #ffe500;
+  --line: rgba(27, 36, 64, 0.16);
+  --muted: #5a6075;
+  --radius: 4px;
+  font-family: 'Jost', 'Futura', 'Avenir Next', system-ui, sans-serif;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: 0;
+  background: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--tag);
+  outline-offset: 2px;
+}
+
+/* ------------------------------------------------------------ stage */
+.stage {
+  position: fixed;
+  inset: 0;
+  cursor: grab;
+  touch-action: none;
+}
+.stage:active {
+  cursor: grabbing;
+}
+.stage.mode-overview,
+.stage.mode-overview:active {
+  cursor: default;
+}
+.stage.mode-tour {
+  cursor: default;
+}
+
+/* The yellow room labels lifted straight from the developer's sheet */
+.tag {
+  display: inline-block;
+  background: var(--tag);
+  color: #111;
+  border: 1px solid rgba(0, 0, 0, 0.75);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1;
+  padding: 4px 6px 3px;
+  white-space: nowrap;
+}
+.tag--lg {
+  font-size: 18px;
+  padding: 6px 10px 5px;
+}
+
+.panel,
+.badge,
+.settings .seg,
+.chip,
+.modes,
+.caption,
+.hint,
+.mappanel {
+  background: var(--plaster-glass);
+  backdrop-filter: blur(10px) saturate(1.1);
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+/* ------------------------------------------------------------ intro */
+.intro {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding: 48px clamp(16px, 6vw, 88px);
+  background: linear-gradient(90deg, rgba(239, 238, 233, 0.97) 0%, rgba(239, 238, 233, 0.9) 34%, rgba(239, 238, 233, 0) 66%);
+  z-index: 10;
+}
+.intro__card {
+  max-width: 440px;
+}
+.intro h1 {
+  font-size: clamp(40px, 6vw, 64px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin: 18px 0 14px;
+}
+.intro__lede {
+  font-size: 18px;
+  line-height: 1.5;
+  margin: 0 0 26px;
+  color: #2c3450;
+}
+.intro__rooms {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  margin-bottom: 28px;
+}
+.intro__rooms td {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+.intro__rooms td:first-child {
+  width: 64px;
+}
+.intro__rooms td:last-child {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.intro__total td {
+  border-bottom: 0;
+  font-weight: 600;
+}
+.intro__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.btn {
+  padding: 13px 20px;
+  border-radius: var(--radius);
+  border: 1px solid var(--ink);
+  font-size: 15px;
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s;
+}
+.btn:hover {
+  background: rgba(27, 36, 64, 0.06);
+}
+.btn--primary {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: var(--plaster);
+}
+.btn--primary:hover {
+  background: #2a3d69;
+}
+.intro__help {
+  margin: 18px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ------------------------------------------------------------ hud */
+.hud {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  padding: 16px;
+}
+.hud > *,
+.hud__top > *,
+.hud__bottom > * {
+  pointer-events: auto;
+}
+.hud__top,
+.hud__bottom {
+  pointer-events: none !important;
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.hud__top {
+  top: 16px;
+  align-items: flex-start;
+}
+.hud__bottom {
+  bottom: 16px;
+  align-items: flex-end;
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px 10px 10px;
+}
+.badge__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.badge__text strong {
+  font-size: 18px;
+  font-weight: 500;
+}
+.badge__text span {
+  font-size: 13px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.settings {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.seg {
+  display: flex;
+  padding: 3px;
+}
+.seg button,
+.modes button {
+  padding: 7px 12px;
+  border-radius: 3px;
+  font-size: 14px;
+  transition: background 0.15s, color 0.15s;
+}
+.seg button.is-on,
+.modes button.is-on {
+  background: var(--navy);
+  color: var(--plaster);
+}
+.seg button:not(.is-on):hover,
+.modes button:not(.is-on):hover {
+  background: rgba(27, 36, 64, 0.07);
+}
+.chip {
+  padding: 9px 12px;
+  font-size: 14px;
+}
+.chip:hover {
+  background: #fff;
+}
+
+.modes {
+  display: flex;
+  padding: 4px;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+}
+.modes button {
+  padding: 10px 18px;
+  font-size: 15px;
+}
+
+/* plan panel */
+.mappanel {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 248px;
+}
+.mappanel:not(.is-open) {
+  width: auto;
+  padding: 4px;
+}
+.mappanel__toggle {
+  font-size: 13px;
+  color: var(--muted);
+  text-align: left;
+  padding: 4px 6px;
+}
+.mappanel__toggle:hover {
+  color: var(--ink);
+}
+.minimap {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+}
+.mm-room {
+  fill: #fff;
+  transition: fill 0.25s;
+}
+.mm-room.is-here {
+  fill: #fdf6c3;
+}
+.mm-tag rect {
+  fill: var(--tag);
+  stroke: #111;
+  stroke-width: 3;
+}
+.mm-tag text {
+  font: 600 38px 'Jost', sans-serif;
+  fill: #111;
+}
+
+/* controls hint */
+.hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 10px 8px 10px 14px;
+  max-width: 260px;
+}
+.hint dl {
+  margin: 0;
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+}
+.hint dl > div {
+  display: flex;
+  gap: 8px;
+}
+.hint dt {
+  font-weight: 600;
+  min-width: 96px;
+}
+.hint dd {
+  margin: 0;
+  color: var(--muted);
+}
+.hint__close {
+  font-size: 18px;
+  line-height: 1;
+  padding: 0 6px;
+  color: var(--muted);
+}
+
+/* tour caption */
+.caption {
+  position: absolute;
+  left: 50%;
+  bottom: 84px;
+  transform: translateX(-50%);
+  width: min(520px, calc(100vw - 32px));
+  padding: 16px 18px 12px;
+}
+.caption__body {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  animation: captionIn 0.45s ease both;
+}
+.caption__body .tag {
+  margin-top: 4px;
+}
+.caption h2 {
+  margin: 0 0 4px;
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.caption p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #2c3450;
+}
+.caption__bar {
+  height: 2px;
+  background: var(--line);
+  margin: 14px 0 8px;
+  overflow: hidden;
+}
+.caption__bar > div {
+  height: 100%;
+  background: var(--navy);
+  transform-origin: left;
+  transition: transform 0.25s linear;
+}
+.link {
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 0;
+}
+.link:hover {
+  color: var(--ink);
+}
+@keyframes captionIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* dollhouse room pins */
+.pins {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+.room-pin {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: auto;
+  display: flex;
+  align-items: stretch;
+  font-size: 13px;
+  white-space: nowrap;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+.room-pin:hover .room-pin__name {
+  background: #fff;
+}
+.room-pin__code {
+  background: var(--tag);
+  border: 1px solid #111;
+  font-weight: 600;
+  padding: 5px 7px 4px;
+}
+.room-pin__name {
+  background: var(--plaster);
+  border: 1px solid #111;
+  border-left: 0;
+  padding: 5px 9px 4px;
+}
+.room-pin__code + .room-pin__name {
+  border-left: 0;
+}
+.room-pin__name:first-child {
+  border-left: 1px solid #111;
+}
+
+/* ------------------------------------------------------------ small screens */
+@media (max-width: 860px) {
+  .hint {
+    display: none;
+  }
+  .mappanel {
+    width: 180px;
+  }
+  .modes button {
+    padding: 9px 12px;
+    font-size: 14px;
+  }
+  .modes {
+    left: auto;
+    right: 0;
+    transform: none;
+  }
+  .caption {
+    bottom: 76px;
+  }
+}
+@media (max-width: 560px) {
+  .intro {
+    align-items: flex-end;
+    background: linear-gradient(0deg, rgba(239, 238, 233, 0.97) 0%, rgba(239, 238, 233, 0.92) 70%, rgba(239, 238, 233, 0.4) 100%);
+    padding-bottom: 24px;
+  }
+  .intro__lede {
+    font-size: 16px;
+  }
+  .intro__rooms {
+    margin-bottom: 18px;
+    font-size: 14px;
+  }
+  .hud__top {
+    flex-direction: column;
+  }
+  .settings {
+    justify-content: flex-start;
+  }
+  .hud__bottom {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .modes {
+    position: static;
+    justify-content: space-between;
+  }
+  .mappanel {
+    width: 150px;
+  }
+  .caption {
+    bottom: 64px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
