@@ -1,6 +1,6 @@
 import { EffectComposer, N8AO, Bloom, ToneMapping, Vignette } from '@react-three/postprocessing'
 import { ToneMappingMode } from 'postprocessing'
-import { useStore } from '../store.js'
+import { useStore, isMobile } from '../store.js'
 import Lights from './Lights.jsx'
 import Architecture from './Architecture.jsx'
 import Living from './Living.jsx'
@@ -13,7 +13,7 @@ import { Player, Overview, worldRef } from './Controls.jsx'
 function Effects() {
   const time = useStore((s) => s.time)
   return (
-    <EffectComposer multisampling={4}>
+    <EffectComposer multisampling={isMobile ? 0 : 4}>
       <N8AO halfRes aoRadius={0.5} intensity={time === 'night' ? 1.6 : 2.4} distanceFalloff={0.6} quality="medium" />
       <Bloom mipmapBlur luminanceThreshold={0.92} luminanceSmoothing={0.25} intensity={time === 'night' ? 0.7 : 0.3} />
       <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
