@@ -210,6 +210,32 @@ button {
   color: var(--muted);
   margin-bottom: 22px;
 }
+.notice__details {
+  margin: 0 0 22px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  font-size: 13px;
+  display: grid;
+  gap: 4px;
+}
+.notice__details > div {
+  display: flex;
+  gap: 12px;
+}
+.notice__details dt {
+  min-width: 96px;
+  color: var(--muted);
+}
+.notice__details dd {
+  margin: 0;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.notice {
+  overflow-y: auto;
+}
 .notice code {
   font-family: ui-monospace, Menlo, Consolas, monospace;
   font-size: 0.92em;
